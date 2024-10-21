@@ -24,10 +24,15 @@ class SeriesController extends Controller
             'name' => 'required|min:3'
         ]);
 
-        $serie = new Serie();
-        $serie->name = $request->input('name');
-        $serie->save();
+        Serie::create($request->all());
         
-        return redirect('/series');
+        return to_route('series.index');
+    }
+
+    public function destroy(Request $request)
+    {
+        Serie::destroy($request->series);
+
+        return to_route('series.index');
     }
 }
