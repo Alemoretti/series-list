@@ -6,11 +6,12 @@ use App\Models\Serie;
 use Illuminate\Http\Request;
 class SeriesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $series = Serie::query()->orderBy('name', 'asc')->get();
+        $successMessage = session('success.message');
 
-        return view('series.index')->with('series', $series);
+        return view('series.index')->with('series', $series)->with('successMessage', $successMessage);
     }
 
     public function create () 
@@ -24,15 +25,15 @@ class SeriesController extends Controller
             'name' => 'required|min:3'
         ]);
 
-        Serie::create($request->all());
-        
-        return to_route('series.index');
+        $serie = Serie::create($request->all());
+
+        return to_route('series.index')->with('success.message', "Serie {$serie->name} added successfully");
     }
 
-    public function destroy(Request $request)
+    public function destroy(Serie $series)
     {
-        Serie::destroy($request->series);
-
-        return to_route('series.index');
+        $series->delete();
+        
+        return to_route('series.index')->with('success.message', "Serie {$series->name} removed successfully");
     }
 }
