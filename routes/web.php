@@ -7,6 +7,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/series', SeriesController::class)->only(['index', 'create', 'store', 'destroy']);
+Route::resource('/series', SeriesController::class)->except(['show']);
 
 
